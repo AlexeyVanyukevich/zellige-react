@@ -14,3 +14,4 @@ export {
   type TroubleProps,
 } from './status'
 export { Dialog, type DialogPlacement, type DialogProps } from './dialog'
+export { Tabs, type TabItem, type TabsProps } from './tabs'

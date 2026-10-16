@@ -14,21 +14,16 @@ const rowsFiles = new Map(
   ]),
 )
 
-// Contract files whose component is not built yet. Each component's task takes its file off;
-// the last one deletes this list and the skip below.
-const PENDING = ['tabs']
-
 const files = contractFiles()
 
 for (const { component, examples } of files) {
   const rows = rowsFiles.get(component)
-  const pending = PENDING.includes(component)
 
-  test.skipIf(pending)(`${component}.html has a rows file`, () => {
+  test(`${component}.html has a rows file`, () => {
     expect(rows, `tests/integration/contract/${component}.tsx is missing`).toBeDefined()
   })
 
-  describe.skipIf(pending)(`${component}.html`, () => {
+  describe(`${component}.html`, () => {
     for (const { name, element } of examples) {
       test(`${name} renders the contract's markup`, () => {
         const row = rows?.[name]
@@ -50,8 +45,4 @@ for (const { component, examples } of files) {
 test('every rows file is for a contract file', () => {
   const components = new Set(files.map((file) => file.component))
   expect([...rowsFiles.keys()].filter((component) => !components.has(component))).toEqual([])
-})
-
-test('no component with a rows file is still pending', () => {
-  expect(PENDING.filter((component) => rowsFiles.has(component))).toEqual([])
 })
