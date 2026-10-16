@@ -1,6 +1,7 @@
 import { AxeBuilder } from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 import { SCHEMES } from '../../playground/schemes'
+import { DIALOGS, openDialog } from './dialogs'
 import { openPlayground } from './playground'
 import { WCAG_TAGS } from './wcag'
 
@@ -35,6 +36,12 @@ const STATES: readonly State[] = [
       await expect(page.getByText('No open issues')).toHaveCount(2)
     },
   },
+  ...DIALOGS.map((example) => ({
+    name: `the ${example.title} dialog, open`,
+    reach: async (page: Page) => {
+      await openDialog(page, example)
+    },
+  })),
 ]
 
 for (const scheme of SCHEMES) {
