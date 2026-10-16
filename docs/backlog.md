@@ -35,18 +35,6 @@ What is known to be wrong and not yet fixed, newest first. The rule for this fil
 - Impact: an application that mounts a dialog open, as with `{open && <Dialog open …>}`, may
   find it closing itself in development if the marking is ever broken
 
-## Core's Tabs contract leaves out the tab list's `id`, which React Aria writes
-
-- Where: core's `contract/tabs.html`, the `zl-tabs__list` element; `src/tabs.tsx`, where the
-  binding drops the `id` from `useTabList`'s props
-- Found: 2026-10-16, when the contract test first rendered Tabs
-- Problem: React Aria 3.53.1's `useTabList` returns an `id` for the list, the base it builds
-  the tab and panel ids from. Nothing in the DOM refers to it. Core's contract, which says its
-  Tabs attributes are React Aria's, has no `id` there, so the binding removes it to match.
-- Impact: the binding departs from "spread React Aria's props" for one attribute. If core adds
-  the `id` to the contract, the binding deletes the line that drops it; if a later React Aria
-  starts referring to the list's id, dropping it would break that reference silently
-
 ## Loading is a `div` with `role="status"` where `jsx-a11y` asks for `<output>`
 
 - Where: `src/status.tsx`, `Loading`, under an `oxlint-disable` comment; core's
