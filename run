@@ -70,6 +70,8 @@ scenario_check() {
   npx tsc
   step "Lint"
   npx oxlint --deny-warnings
+  step "Build"
+  npx tsc -p tsconfig.build.json
   step "Unit and integration tests"
   npx vitest run
   browser_suite
@@ -82,7 +84,7 @@ Usage: ./run <scenario>
 
   ${BOLD}dev${OFF}     the playground, served by Vite
   ${BOLD}test${OFF}    the browser suite, in the Playwright image; arguments go to playwright test
-  ${BOLD}check${OFF}   formatting, types, lint, Vitest and the browser suite
+  ${BOLD}check${OFF}   formatting, types, lint, the build, Vitest and the browser suite
 EOF
 }
 
