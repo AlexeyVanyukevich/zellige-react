@@ -1,0 +1,4 @@
+{
+  "extends": "charter/stacks/react/tsconfig",
+  "include": ["src", "tests", "playground", "*.ts"]
+}
