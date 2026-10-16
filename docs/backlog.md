@@ -3,6 +3,38 @@
 What is known to be wrong and not yet fixed, newest first. The rule for this file is charter's
 `core/rules/backlog.md`: one entry per finding, deleted by the commit that fixes it.
 
+## WebKit is not run
+
+- Where: `playwright.config.ts`, the `ui` project
+- Found: 2026-10-16, deferred on purpose by the v0.1 plan, as in core
+- Problem: every browser test runs in Chromium only. One of the applications due to migrate is
+  a PWA used on iPhones, where every browser is WebKit, and nothing here has driven the dialog's
+  `cancel` and `close` handling, the backdrop presses or React Aria's Tabs there.
+- Impact: that application's migration, the last one, would be the first WebKit run of the
+  binding. Add a WebKit project before it starts.
+
+## No test proves that Dialog focuses its frame
+
+- Where: `src/dialog.tsx`, the `frame.current?.focus()` after `showModal()`;
+  `tests/ui/dialog.spec.ts`
+- Found: 2026-10-16, while checking that each dialog test fails without the behaviour it covers
+- Problem: with the call removed, every test still passes. Chromium's `showModal()` focuses the
+  frame on its own, as the first focusable element in the dialog. The call is kept because the
+  design asks for it and another engine may pick a different element, but nothing shows it does
+  anything today.
+- Impact: a change that drops the call passes review unnoticed; the gap matters once WebKit runs
+
+## A dialog mounted already open is untested
+
+- Where: `src/dialog.tsx`, the `closing` flag; `playground/sections/dialogs.tsx`
+- Found: 2026-10-16, while writing the dialog
+- Problem: every playground dialog is mounted closed and opened later. One rendered with `open`
+  true from its first render, under React's `StrictMode`, runs its effect, its cleanup and its
+  effect again; the cleanup's `close()` is marked so its `close` event does not call `onClose`,
+  but no test renders that case.
+- Impact: an application that mounts a dialog open, as with `{open && <Dialog open …>}`, may
+  find it closing itself in development if the marking is ever broken
+
 ## Core's Tabs contract leaves out the tab list's `id`, which React Aria writes
 
 - Where: core's `contract/tabs.html`, the `zl-tabs__list` element; `src/tabs.tsx`, where the
