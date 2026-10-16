@@ -36,3 +36,8 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
+
+.playground__form {
+  display: grid;
+  gap: 1rem;
+}

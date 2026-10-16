@@ -6,6 +6,7 @@ import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { SCHEMES, schemeFrom, type Scheme } from './schemes'
 import { Buttons } from './sections/buttons'
+import { Fields } from './sections/fields'
 
 function Playground() {
   const [scheme, setScheme] = useState<Scheme>(() => schemeFrom(location.search))
@@ -38,6 +39,7 @@ function Playground() {
       </header>
       <main className="playground__main">
         <Buttons />
+        <Fields />
       </main>
     </>
   )

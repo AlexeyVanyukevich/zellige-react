@@ -11,7 +11,16 @@ interface State {
 }
 
 // Every state a playground flow reaches. A flow's task adds its rows here.
-const STATES: readonly State[] = [{ name: 'the page as it opens', reach: async () => {} }]
+const STATES: readonly State[] = [
+  { name: 'the page as it opens', reach: async () => {} },
+  {
+    name: 'the form after a failed submit',
+    reach: async (page) => {
+      await page.getByRole('button', { name: 'Add the guest' }).click()
+      await expect(page.getByText('Enter a name')).toBeVisible()
+    },
+  },
+]
 
 for (const scheme of SCHEMES) {
   for (const state of STATES) {
