@@ -5,6 +5,7 @@ import './playground.css'
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { SCHEMES, schemeFrom, type Scheme } from './schemes'
+import { Badges } from './sections/badges'
 import { Buttons } from './sections/buttons'
 import { Cards } from './sections/cards'
 import { Fields } from './sections/fields'
@@ -42,6 +43,7 @@ function Playground() {
         <Buttons />
         <Fields />
         <Cards />
+        <Badges />
       </main>
     </>
   )
