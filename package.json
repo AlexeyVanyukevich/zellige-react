@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-aria": "3.53.1",
+    "react-dom": "^19.3.1",
+    "react-stately": "3.51.0"
   }
 }

@@ -36,6 +36,16 @@ const STATES: readonly State[] = [
       await expect(page.getByText('No open issues')).toHaveCount(2)
     },
   },
+  {
+    name: 'the Payment tab selected',
+    reach: async (page) => {
+      await page
+        .getByRole('tablist', { name: 'Booking', exact: true })
+        .getByRole('tab', { name: 'Payment' })
+        .click()
+      await expect(page.getByRole('tabpanel', { name: 'Payment' })).toBeVisible()
+    },
+  },
   ...DIALOGS.map((example) => ({
     name: `the ${example.title} dialog, open`,
     reach: async (page: Page) => {

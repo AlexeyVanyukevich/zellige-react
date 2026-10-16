@@ -5,7 +5,7 @@ test('by keyboard, a failed submit focuses the invalid field and a good one clea
   page,
 }) => {
   await openPlayground(page)
-  const name = page.getByRole('textbox', { name: 'Name' })
+  const name = page.getByRole('textbox', { name: 'Name', exact: true })
   const submit = page.getByRole('button', { name: 'Add the guest' })
   const toSubmit = async () => {
     await page.keyboard.press('Tab')

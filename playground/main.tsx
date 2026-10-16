@@ -12,6 +12,7 @@ import { Dialogs } from './sections/dialogs'
 import { Fields } from './sections/fields'
 import { Notices } from './sections/notices'
 import { Statuses } from './sections/statuses'
+import { TabsSection } from './sections/tabs'
 
 function Playground() {
   const [scheme, setScheme] = useState<Scheme>(() => schemeFrom(location.search))
@@ -50,6 +51,7 @@ function Playground() {
         <Notices />
         <Statuses />
         <Dialogs />
+        <TabsSection />
       </main>
     </>
   )
