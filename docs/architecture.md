@@ -29,7 +29,7 @@ application's bundler, not for Node.
 | ----------------------------- | -------------------------- | ------------------------- |
 | `react-aria`, `react-stately` | Dependency                 | Exactly 3.53.1 and 3.51.0 |
 | `react`, `react-dom`          | Peer                       | `^19.0.0`                 |
-| `@zellige/core`               | Peer, and dev at a git tag | `~0.1.0`; dev `#v0.1.0`   |
+| `@zellige/core`               | Peer, and dev at a git tag | `~0.1.1`; dev `#v0.1.1`   |
 
 `react-stately` 3.51.0 is the version `react-aria` 3.53.1 itself depends on. Both are exact
 because core's Tabs contract records 3.53.1's attributes; raising them is a commit of its own,
@@ -129,9 +129,6 @@ the selected panel is rendered, and it takes `tabindex="0"` only when it holds n
 React Aria reads the direction from its `I18nProvider` locale, not from the DOM's `dir`: a
 right-to-left application wraps itself in `I18nProvider` from `react-aria`, which the binding does
 not re-export.
-
-One departure from "spread React Aria's props": `useTabList` gives the list an `id` that nothing
-refers to, and core's contract has none, so the binding leaves it off (backlog).
 
 ## The contract test
 

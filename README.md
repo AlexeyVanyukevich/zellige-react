@@ -13,7 +13,7 @@ Over git, at release tags, both packages:
 
 ```json
 "dependencies": {
-  "@zellige/core": "github:AlexeyVanyukevich/zellige-core#v0.1.0",
+  "@zellige/core": "github:AlexeyVanyukevich/zellige-core#v0.1.1",
   "@zellige/react": "github:AlexeyVanyukevich/zellige-react#v0.1.0"
 }
 ```

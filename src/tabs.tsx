@@ -48,9 +48,7 @@ export function Tabs({
   }
   const state = useTabListState<TabItem>(aria)
   const list = useRef<HTMLDivElement>(null)
-  // React Aria also puts the base of the tab ids on the list as an `id` nothing refers to.
-  // Core's contract has none, so it is left off (docs/backlog.md).
-  const { id: _unreferenced, ...tabListProps } = useTabList(aria, state, list).tabListProps
+  const { tabListProps } = useTabList(aria, state, list)
 
   return (
     <div {...props} className={cx('zl-tabs', className)}>
