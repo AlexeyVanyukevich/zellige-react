@@ -8,6 +8,7 @@ import { SCHEMES, schemeFrom, type Scheme } from './schemes'
 import { Badges } from './sections/badges'
 import { Buttons } from './sections/buttons'
 import { Cards } from './sections/cards'
+import { Dialogs } from './sections/dialogs'
 import { Fields } from './sections/fields'
 import { Notices } from './sections/notices'
 import { Statuses } from './sections/statuses'
@@ -48,6 +49,7 @@ function Playground() {
         <Badges />
         <Notices />
         <Statuses />
+        <Dialogs />
       </main>
     </>
   )
