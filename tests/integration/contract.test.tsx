@@ -16,7 +16,7 @@ const rowsFiles = new Map(
 
 // Contract files whose component is not built yet. Each component's task takes its file off;
 // the last one deletes this list and the skip below.
-const PENDING = ['dialog', 'status', 'tabs']
+const PENDING = ['dialog', 'tabs']
 
 const files = contractFiles()
 

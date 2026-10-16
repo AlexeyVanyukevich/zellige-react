@@ -41,3 +41,12 @@ body {
   display: grid;
   gap: 1rem;
 }
+
+.playground__region {
+  display: grid;
+  gap: 1rem;
+}
+
+.playground__region > h3 {
+  margin: 0;
+}

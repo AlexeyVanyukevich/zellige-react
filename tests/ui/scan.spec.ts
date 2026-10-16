@@ -20,6 +20,21 @@ const STATES: readonly State[] = [
       await expect(page.getByText('Enter a name')).toBeVisible()
     },
   },
+  {
+    name: 'the failed load',
+    reach: async (page) => {
+      await page.getByRole('button', { name: 'Load the issues' }).click()
+      await expect(page.getByRole('button', { name: 'Retry' })).toBeVisible()
+    },
+  },
+  {
+    name: 'the load after a retry',
+    reach: async (page) => {
+      await page.getByRole('button', { name: 'Load the issues' }).click()
+      await page.getByRole('button', { name: 'Retry' }).click()
+      await expect(page.getByText('No open issues')).toHaveCount(2)
+    },
+  },
 ]
 
 for (const scheme of SCHEMES) {
