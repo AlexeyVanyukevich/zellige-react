@@ -5,10 +5,31 @@
   "license": "UNLICENSED",
   "private": true,
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=24.0.0"
   },
+  "scripts": {
+    "prepare": "tsc -p tsconfig.build.json"
+  },
   "prettier": "charter/stacks/typescript/prettier",
+  "dependencies": {
+    "react-aria": "3.53.1",
+    "react-stately": "3.51.0"
+  },
+  "peerDependencies": {
+    "@zellige/core": "~0.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "1.64.1",
@@ -24,14 +45,10 @@
     "oxlint": "^1.88.0",
     "oxlint-tsgolint": "^7.0.2004",
     "prettier": "^3.9.10",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "typescript": "^7.0.2",
     "vite": "^8.3.4",
     "vitest": "^5.0.5"
-  },
-  "dependencies": {
-    "react": "^19.3.1",
-    "react-aria": "3.53.1",
-    "react-dom": "^19.3.1",
-    "react-stately": "3.51.0"
   }
 }
