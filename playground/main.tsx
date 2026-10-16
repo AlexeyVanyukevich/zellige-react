@@ -9,6 +9,7 @@ import { Badges } from './sections/badges'
 import { Buttons } from './sections/buttons'
 import { Cards } from './sections/cards'
 import { Fields } from './sections/fields'
+import { Notices } from './sections/notices'
 
 function Playground() {
   const [scheme, setScheme] = useState<Scheme>(() => schemeFrom(location.search))
@@ -44,6 +45,7 @@ function Playground() {
         <Fields />
         <Cards />
         <Badges />
+        <Notices />
       </main>
     </>
   )

@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { flushSync } from 'react-dom'
-import { Button, Field, Input, Select, Textarea } from '../../src'
+import { Button, Field, Input, Notice, Select, Textarea } from '../../src'
 import { Section } from '../section'
 
 // What an application does with a failed submit: show the error, then focus the first invalid
@@ -8,12 +8,14 @@ import { Section } from '../section'
 export function Fields() {
   const name = useRef<HTMLInputElement>(null)
   const [error, setError] = useState<string>()
+  const [added, setAdded] = useState<string>()
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const value = new FormData(event.currentTarget).get('name')
     if (typeof value === 'string' && value.trim()) {
       setError(undefined)
+      setAdded(value.trim())
       return
     }
     // The error is on the page before focus arrives, so it is read with the field.
@@ -45,6 +47,8 @@ export function Fields() {
           </Button>
         </div>
       </form>
+      {/* Mounted from the start and written into, so the outcome is announced. */}
+      <Notice title={added ? `${added} is added` : 'No guest added yet'} />
       <Input type="search" aria-label="Search the guests" />
     </Section>
   )
