@@ -30,6 +30,7 @@ test('by keyboard, a failed submit focuses the invalid field and a good one clea
   await page.keyboard.press('Enter')
 
   await expect(submit).toBeFocused()
+  await expect(page.getByRole('status').filter({ hasText: 'Ada Lovelace is added' })).toBeVisible()
   await expect(name).not.toHaveAttribute('aria-invalid')
   await expect(name).toHaveAccessibleDescription('As on the passport')
 })
