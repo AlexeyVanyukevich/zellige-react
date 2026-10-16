@@ -5,6 +5,7 @@ import './playground.css'
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { SCHEMES, schemeFrom, type Scheme } from './schemes'
+import { Buttons } from './sections/buttons'
 
 function Playground() {
   const [scheme, setScheme] = useState<Scheme>(() => schemeFrom(location.search))
@@ -35,7 +36,9 @@ function Playground() {
           ))}
         </select>
       </header>
-      <main className="playground__main" />
+      <main className="playground__main">
+        <Buttons />
+      </main>
     </>
   )
 }
