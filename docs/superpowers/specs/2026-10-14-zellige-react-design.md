@@ -1,6 +1,6 @@
 # zellige react — design
 
-Status: **approved**, 2026-10-16, against `@zellige/core` 0.1.0 and charter 3.3. Not built.
+Status: **built**, 2026-10-16, against `@zellige/core` 0.1.0 and charter 3.3.
 
 > **This becomes a decision record once the slice ships.**
 >

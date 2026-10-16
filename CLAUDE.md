@@ -7,8 +7,6 @@ exactly and adds the behaviour: the platform's `<dialog>`, and React Aria's hook
 platform lacks. Classes, tokens and markup belong to core, in its own repository; a change to
 them starts there.
 
-Not built yet: the design is `docs/superpowers/specs/2026-10-14-zellige-react-design.md`, beside
-core's `docs/superpowers/specs/2026-10-14-zellige-core-design.md`, and `docs/architecture.md`
-takes over when the first slice ships.
+`docs/architecture.md` is what the binding does today; read it before changing anything.
 
 `./run check` is the verification command. Start sessions at the repository root.
