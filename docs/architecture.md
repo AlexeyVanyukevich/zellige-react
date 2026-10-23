@@ -29,7 +29,7 @@ application's bundler, not for Node.
 | ----------------------------- | -------------------------- | ------------------------- |
 | `react-aria`, `react-stately` | Dependency                 | Exactly 3.53.1 and 3.51.0 |
 | `react`, `react-dom`          | Peer                       | `^19.0.0`                 |
-| `@zellige/core`               | Peer, and dev at a git tag | `~0.2.0`; dev `#v0.2.0`   |
+| `@zellige/core`               | Peer, and dev at a git tag | `~0.2.0`; dev `#v0.2.1`   |
 
 `react-stately` 3.51.0 is the version `react-aria` 3.53.1 itself depends on. Both are exact
 because core's Tabs and radio group contracts record 3.53.1's attributes; raising them is a commit of its own,
