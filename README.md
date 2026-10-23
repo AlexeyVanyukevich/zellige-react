@@ -1,9 +1,9 @@
 # @zellige/react
 
 The React binding of the zellige component kit: Button, Field with Input, Select and Textarea,
-Card, Badge, Notice, Empty / Loading / Trouble, Dialog and Tabs. It renders `@zellige/core`'s
-markup exactly and adds the behaviour — the platform's `<dialog>`, and React Aria's hooks for
-Tabs. Classes, tokens and markup are core's, in its own repository.
+RadioGroup with Radio, Card, Badge, Notice, Empty / Loading / Trouble, Dialog and Tabs. It
+renders `@zellige/core`'s markup exactly and adds the behaviour — the platform's `<dialog>`, and
+React Aria's hooks for Tabs and RadioGroup. Classes, tokens and markup are core's, in its own repository.
 
 How the binding is built, and why it is shaped as it is: [`docs/architecture.md`](docs/architecture.md).
 
