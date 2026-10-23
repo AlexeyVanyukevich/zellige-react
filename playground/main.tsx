@@ -11,6 +11,7 @@ import { Cards } from './sections/cards'
 import { Dialogs } from './sections/dialogs'
 import { Fields } from './sections/fields'
 import { Notices } from './sections/notices'
+import { Radios } from './sections/radios'
 import { Statuses } from './sections/statuses'
 import { TabsSection } from './sections/tabs'
 
@@ -46,6 +47,7 @@ function Playground() {
       <main className="playground__main">
         <Buttons />
         <Fields />
+        <Radios />
         <Cards />
         <Badges />
         <Notices />

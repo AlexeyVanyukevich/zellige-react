@@ -22,6 +22,24 @@ const STATES: readonly State[] = [
     },
   },
   {
+    name: 'the radio form after a failed send',
+    reach: async (page) => {
+      await page.getByRole('button', { name: 'Send the answers' }).click()
+      await expect(page.getByText('Choose how often')).toBeVisible()
+    },
+  },
+  {
+    name: 'the radio form after a good send',
+    reach: async (page) => {
+      const answer = (group: string, name: string) =>
+        page.getByRole('radiogroup', { name: group, exact: true }).getByRole('radio', { name })
+      await answer('Retries', 'Five times').click()
+      await answer('Backoff', 'Doubling').click()
+      await page.getByRole('button', { name: 'Send the answers' }).click()
+      await expect(page.getByText('Sent: Five times, Doubling')).toBeVisible()
+    },
+  },
+  {
     name: 'the failed load',
     reach: async (page) => {
       await page.getByRole('button', { name: 'Load the issues' }).click()
