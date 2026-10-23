@@ -15,3 +15,4 @@ export {
 } from './status'
 export { Dialog, type DialogPlacement, type DialogProps } from './dialog'
 export { Tabs, type TabItem, type TabsProps } from './tabs'
+export { Radio, RadioGroup, type RadioGroupProps, type RadioProps } from './radio'
