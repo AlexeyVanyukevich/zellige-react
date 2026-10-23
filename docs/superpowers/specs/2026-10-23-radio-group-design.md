@@ -1,6 +1,6 @@
 # Radio group — design
 
-Status: **approved**, 2026-10-23; designed 2026-10-23. Against `@zellige/core` 0.2.0.
+Status: **built**, 2026-10-23; approved and designed 2026-10-23. Against `@zellige/core` 0.2.0.
 
 > **This becomes a decision record once the slice ships.**
 >
