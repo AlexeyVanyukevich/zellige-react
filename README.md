@@ -14,7 +14,7 @@ Over git, at release tags, both packages:
 ```json
 "dependencies": {
   "@zellige/core": "github:AlexeyVanyukevich/zellige-core#v0.2.1",
-  "@zellige/react": "github:AlexeyVanyukevich/zellige-react#v0.2.0"
+  "@zellige/react": "github:AlexeyVanyukevich/zellige-react#v0.2.1"
 }
 ```
 

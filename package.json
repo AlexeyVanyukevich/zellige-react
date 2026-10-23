@@ -1,6 +1,6 @@
 {
   "name": "@zellige/react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The React binding of the zellige component kit",
   "license": "UNLICENSED",
   "private": true,
