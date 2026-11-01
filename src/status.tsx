@@ -28,7 +28,7 @@ export function Loading({ label, className, ...props }: LoadingProps) {
   const text = useString('loading', label)
   return (
     // Core's contract fixes a `div` with `role="status"`; a change of element starts in core
-    // (docs/backlog.md).
+    // (issue #2).
     // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- the markup is core's
     <div {...props} role="status" className={cx('zl-loading', className)}>
       <span className="zl-loading__spinner" aria-hidden="true" />
