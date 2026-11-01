@@ -4,7 +4,7 @@ What `@zellige/react` is today. This document is authoritative for that: where i
 record disagree, this one is right. The design record,
 [`docs/superpowers/specs/2026-10-14-zellige-react-design.md`](superpowers/specs/2026-10-14-zellige-react-design.md),
 says **why** the binding has the shape it does; read it for reasons, never for behaviour. Known
-defects that were found and not yet fixed are listed in [`docs/backlog.md`](backlog.md), not here.
+defects that were found and not yet fixed are the repository's open GitHub issues, not here.
 
 Roles used below:
 
@@ -53,7 +53,7 @@ or the `@zellige/core/css/<file>.css` files it picks.
   `label`) wins over every provider. Components read them through `useString` in
   `src/provider.tsx`.
 - **A `jsx-a11y` finding is fixed, not silenced.** The one `oxlint-disable` in `src/` is on
-  Loading, whose element is core's (backlog).
+  Loading, whose element is core's (issue #2).
 
 ## Components
 
@@ -244,7 +244,7 @@ dependency in the same commit as the component changes; the contract test proves
 
 ## What is not built yet
 
-- WebKit is not run (backlog).
+- WebKit is not run (issue #5).
 - Nothing is published to a registry; installs are over git at a tag. No application has yet
   installed the binding over git, so the `prepare` build on install is untried.
 - No screen reader, 200% zoom or 320 px viewport has been tried.

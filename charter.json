@@ -2,5 +2,6 @@
   "workspaces": {
     ".": ["frontend", "typescript", "react", "vitest", "playwright"]
   },
+  "backlog": "github",
   "release": { "verify": "./run check", "files": ["README.md"] }
 }
