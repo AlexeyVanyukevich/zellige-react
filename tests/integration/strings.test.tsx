@@ -21,6 +21,28 @@ const CASES: readonly Case[] = [
   { name: 'no provider', string: 'close', providers: [], own: undefined, expected: 'Close' },
   { name: 'no provider', string: 'retry', providers: [], own: undefined, expected: 'Retry' },
   { name: 'no provider', string: 'loading', providers: [], own: undefined, expected: 'Loading…' },
+  { name: 'no provider', string: 'table', providers: [], own: undefined, expected: 'Table' },
+  {
+    name: 'no provider',
+    string: 'codeBlock',
+    providers: [],
+    own: undefined,
+    expected: 'Code block',
+  },
+  {
+    name: "the provider's value",
+    string: 'table',
+    providers: [{ table: 'Таблица' }],
+    own: undefined,
+    expected: 'Таблица',
+  },
+  {
+    name: "the provider's value",
+    string: 'codeBlock',
+    providers: [{ codeBlock: 'Код' }],
+    own: undefined,
+    expected: 'Код',
+  },
   {
     name: "the provider's value",
     string: 'close',
