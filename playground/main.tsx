@@ -10,6 +10,7 @@ import { Buttons } from './sections/buttons'
 import { Cards } from './sections/cards'
 import { Dialogs } from './sections/dialogs'
 import { Fields } from './sections/fields'
+import { MarkdownSection } from './sections/markdown'
 import { Notices } from './sections/notices'
 import { Radios } from './sections/radios'
 import { Statuses } from './sections/statuses'
@@ -54,6 +55,7 @@ function Playground() {
         <Statuses />
         <Dialogs />
         <TabsSection />
+        <MarkdownSection />
       </main>
     </>
   )
