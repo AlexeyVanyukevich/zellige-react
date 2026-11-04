@@ -1,6 +1,6 @@
 # Markdown — design
 
-Status: **approved**, 2026-11-04. Against `@zellige/core` 0.3.0.
+Status: **built**, 2026-11-04; approved and designed 2026-11-04. Against `@zellige/core` 0.3.0.
 
 > **This becomes a decision record once the slice ships.**
 >

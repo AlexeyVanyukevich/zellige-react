@@ -13,9 +13,9 @@ Roles used below:
 - **An application** — anything that installs both packages, loads core's CSS and renders the
   binding's components.
 
-Version 0.2 holds the nine components of core 0.2 — Button, Field with Input, Select and
-Textarea, RadioGroup with Radio, Card, Badge, Notice, Empty / Loading / Trouble, Dialog, Tabs —
-plus `UiProvider` and `buttonClass`. It ships no CSS.
+Version 0.3 holds the ten components of core 0.3 — Button, Field with Input, Select and
+Textarea, RadioGroup with Radio, Card, Badge, Notice, Empty / Loading / Trouble, Dialog, Tabs,
+and Markdown for core's prose — plus `UiProvider` and `buttonClass`. It ships no CSS.
 
 ## What ships
 
@@ -25,15 +25,18 @@ to ES modules with declarations; it is the `prepare` script, so an install over 
 Relative imports in `dist/` carry no extension, as the source's do: the output is for an
 application's bundler, not for Node.
 
-| Dependency                    | Kind                       | Range                     |
-| ----------------------------- | -------------------------- | ------------------------- |
-| `react-aria`, `react-stately` | Dependency                 | Exactly 3.53.1 and 3.51.0 |
-| `react`, `react-dom`          | Peer                       | `^19.0.0`                 |
-| `@zellige/core`               | Peer, and dev at a git tag | `~0.2.0`; dev `#v0.2.3`   |
+| Dependency                                                                | Kind                       | Range                        |
+| ------------------------------------------------------------------------- | -------------------------- | ---------------------------- |
+| `react-aria`, `react-stately`                                             | Dependency                 | Exactly 3.53.1 and 3.51.0    |
+| `react-markdown`, `micromark-extension-gfm-table`, `mdast-util-gfm-table` | Dependency                 | Exactly 10.1.0, 2.1.2, 2.0.0 |
+| `react`, `react-dom`                                                      | Peer                       | `^19.0.0`                    |
+| `@zellige/core`                                                           | Peer, and dev at a git tag | `~0.3.0`; dev `#v0.3.0`      |
 
 `react-stately` 3.51.0 is the version `react-aria` 3.53.1 itself depends on. Both are exact
 because core's Tabs and radio group contracts record 3.53.1's attributes; raising them is a commit of its own,
-with the contract test run against the new version.
+with the contract test run against the new version. The Markdown parsers are exact for the same
+reason: what they emit is held to core's prose contract, and to the binding's own rows for
+untrusted input.
 
 An application imports core's CSS itself: `@zellige/core/tokens.css`, then `@zellige/core/zl.css`
 or the `@zellige/core/css/<file>.css` files it picks.
@@ -47,13 +50,15 @@ or the `@zellige/core/css/<file>.css` files it picks.
   Field's controls' do; its wrapper and label are core's and take none.
 - **Behaviour is borrowed.** Dialog's is the platform's `<dialog>`; Tabs' and RadioGroup's are
   React Aria's hooks with React Stately's state. No component writes a keyboard model of its own.
-- **The kit's only own text** is `close`, `retry` and `loading`, defaulting to `Close`, `Retry`
-  and `Loading…`. `<UiProvider strings={…}>` sets any of them for everything inside; a nested
-  provider overrides only what it names. A component's own prop (`closeLabel`, `retryLabel`,
-  `label`) wins over every provider. Components read them through `useString` in
+- **The kit's only own text** is `close`, `retry`, `loading`, `table` and `codeBlock`,
+  defaulting to `Close`, `Retry`, `Loading…`, `Table` and `Code block`. `<UiProvider
+strings={…}>` sets any of them for everything inside; a nested provider overrides only what it
+  names. A component's own prop (`closeLabel`, `retryLabel`, `label`) wins over every provider;
+  `table` and `codeBlock` have none. Components read them through `useString` in
   `src/provider.tsx`.
-- **A `jsx-a11y` finding is fixed, not silenced.** The one `oxlint-disable` in `src/` is on
-  Loading, whose element is core's (issue #2).
+- **A `jsx-a11y` finding is fixed, not silenced.** The two `oxlint-disable` comments in `src/`
+  are on elements that are core's: Loading's `div` (issue #2) and prose's scroll wrapper
+  (issue #9).
 
 ## Components
 
@@ -72,6 +77,7 @@ or the `@zellige/core/css/<file>.css` files it picks.
 | `Trouble`                     | `div` with `role="alert"`          | `title`, `detail?`, `onRetry?`, `retryLabel?`                                                                         |
 | `Dialog`                      | `dialog.zl-dialog`                 | `open`, `onClose`, `title`, `placement?`, `footer?`, `closeLabel?`                                                    |
 | `Tabs`                        | `div.zl-tabs`                      | `label`, `items`, `value?`, `defaultValue?`, `onChange?`                                                              |
+| `Markdown`                    | `div.zl-prose`; no `children`      | `source`, `headingLevel` (1–6)                                                                                        |
 
 `buttonClass(variant?, extra?)` returns core's button classes for an element that is not a
 `<button>`, such as an application's router link.
@@ -155,6 +161,29 @@ React Aria reads the direction from its `I18nProvider` locale, not from the DOM'
 right-to-left application wraps itself in `I18nProvider` from `react-aria`, which the binding does
 not re-export.
 
+### Markdown
+
+`react-markdown` parses `source` as CommonMark plus GFM tables — added by a remark plugin in
+`src/markdown.tsx` from `micromark-extension-gfm-table` and `mdast-util-gfm-table`, and nothing
+else of GFM (issue #10). Strikethrough, bare URLs, footnotes and task lists show as literal text;
+task lists wait on core's markup for them (core's issue #13). The source is parsed on every render
+(issue #11). No state; not a live region.
+
+- **Headings**: a second remark plugin renders the source's shallowest heading at
+  `headingLevel` and every other at the same distance from it, capped at `h6`. Gaps in the
+  source's outline are kept.
+- **The source is untrusted**, and `react-markdown`'s `components` decide what reaches the DOM:
+  - Raw HTML, inline or block, is text: `react-markdown` turns `raw` nodes into text by default.
+  - A link keeps its `a` only when `new URL(href)` parses and its protocol is `http:`, `https:`
+    or `mailto:`; otherwise it is its children. Relative links are dropped too. The `a` takes
+    `href` alone, so a Markdown link title is dropped. `react-markdown`'s default
+    `urlTransform` stays on before this.
+  - An image is its alt text: no `img`, and so no request and no preload `<link>`.
+  - `code` drops the fence's `language-*` class; `th` and `td` drop the alignment `style`.
+- **Scroll wrappers**: each `table` and `pre` is wrapped in core's
+  `div.zl-prose__scroll`, `role="group"`, `tabindex="0"`, named by the `table` or `codeBlock`
+  string. Each is a Tab stop whether or not it overflows.
+
 ## The contract test
 
 `tests/integration/contract.test.tsx` holds the binding to core's `contract/*.html`, read from the
@@ -171,7 +200,9 @@ installed `@zellige/core` through its `exports`.
   fails, and a rows file with no contract file fails. A core release that adds or renames an
   example therefore fails here until the binding follows.
 - Dialog's rows render `open={false}`: the contract has no `open` attribute. Button's `link`
-  example is rendered as an application would, `<a className={buttonClass()}>`.
+  example is rendered as an application would, `<a className={buttonClass()}>`. Prose's rows are
+  `Markdown` with the source an agent would write, the `document` one's top heading at
+  `headingLevel={4}`.
 
 ## The playground
 
@@ -189,7 +220,8 @@ above core's. It is not shipped. It imports core's CSS by package name and the b
   fails once and is
   retried, focus moving to the region's `h3`; three dialogs, one per contract example, the
   booking one submitting its body's form from the foot; Tabs left-to-right, controlled with a
-  control in its panel, and right-to-left inside `I18nProvider locale="he-IL"`.
+  control in its panel, and right-to-left inside `I18nProvider locale="he-IL"`; a Markdown plan
+  at `headingLevel={3}` under its section's `h2`, with a link, a wide table and a code block.
 - The loader fails its first attempt and succeeds after, each settling on the next microtask, so
   no test waits on a timer.
 
@@ -212,6 +244,7 @@ the browser suite.
 | `dialog.test.tsx`    | The close button's name falls back as the strings do, and it calls `onClose`                                                                                                  |
 | `tabs.test.tsx`      | The tab selected at first; uncontrolled and controlled selection                                                                                                              |
 | `radio.test.tsx`     | The radio checked at first; choosing, controlled and not; names, descriptions and validity; `disabled`; `ref` and own attributes on the input; a radio outside a group throws |
+| `markdown.test.tsx`  | A dataset of source, `headingLevel` and expected markup: heading shifts and the clamp, wrappers, raw HTML, links by scheme, images, entities; no image request; root props    |
 | `package.test.ts`    | `npm pack` ships `dist/` alone; every module has declarations; the entry exports what `src/` does                                                                             |
 
 `package.test.ts` reads the `dist/` the build step made and fails if there is none.
@@ -222,15 +255,16 @@ version read from the installed `@playwright/test`, which is pinned exactly. The
 stay on the host and connect with `connectOptions: { wsEndpoint, exposeNetwork: '<loopback>' }`.
 `ZELLIGE_BROWSER_PORT` moves the port from 3556, one above core's. Chromium only.
 
-| Spec             | What it proves                                                                                                                                               |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `page.spec.ts`   | One `h1`, one `main`, no skipped heading level, no repeated `id`; the Scheme select by keyboard                                                              |
-| `scan.spec.ts`   | axe under `WCAG_TAGS` in both schemes, over every state the flows reach, each dialog open                                                                    |
-| `field.spec.ts`  | By keyboard: a failed submit focuses Name and describes the error; a good one clears it and writes into the Notice                                           |
-| `status.spec.ts` | By keyboard: the failed load is an alert, Retry moves focus to the region heading, the result arrives                                                        |
-| `dialog.spec.ts` | Escape; a browser's own `close()`; backdrop presses; the opening tap; focus order and return, per dialog; the foot submitting the body's form                |
-| `tabs.spec.ts`   | A dataset of key, start and end tab in both directions; the single tab stop; a keyboard journey into each kind of panel                                      |
-| `radio.spec.ts`  | A dataset of key, start and end radio in both directions; by keyboard, one stop per group, a failed send focusing the unanswered group, a good one announced |
+| Spec               | What it proves                                                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `page.spec.ts`     | One `h1`, one `main`, no skipped heading level, no repeated `id`; the Scheme select by keyboard                                                              |
+| `scan.spec.ts`     | axe under `WCAG_TAGS` in both schemes, over every state the flows reach, each dialog open                                                                    |
+| `field.spec.ts`    | By keyboard: a failed submit focuses Name and describes the error; a good one clears it and writes into the Notice                                           |
+| `status.spec.ts`   | By keyboard: the failed load is an alert, Retry moves focus to the region heading, the result arrives                                                        |
+| `dialog.spec.ts`   | Escape; a browser's own `close()`; backdrop presses; the opening tap; focus order and return, per dialog; the foot submitting the body's form                |
+| `tabs.spec.ts`     | A dataset of key, start and end tab in both directions; the single tab stop; a keyboard journey into each kind of panel                                      |
+| `radio.spec.ts`    | A dataset of key, start and end radio in both directions; by keyboard, one stop per group, a failed send focusing the unanswered group, a good one announced |
+| `markdown.spec.ts` | By keyboard: the link, the Table group, then the Code block group; at 320 px, Arrow Right scrolls the table's wrapper and not the page                       |
 
 Elements are found by role and accessible name. The dialog specs read focus on the frame with
 `document.activeElement`, the frame having no role.
@@ -247,4 +281,5 @@ dependency in the same commit as the component changes; the contract test proves
 - WebKit is not run (issue #5).
 - Nothing is published to a registry; installs are over git at a tag. No application has yet
   installed the binding over git, so the `prepare` build on install is untried.
-- No screen reader, 200% zoom or 320 px viewport has been tried.
+- No screen reader or 200% zoom has been tried. A 320 px viewport has been tried only for
+  Markdown's table wrapper scrolling.
