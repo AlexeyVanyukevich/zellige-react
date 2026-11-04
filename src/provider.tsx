@@ -5,9 +5,19 @@ export interface UiStrings {
   close: string
   retry: string
   loading: string
+  /** The name of the scroll wrapper around a table in rendered Markdown. */
+  table: string
+  /** The name of the scroll wrapper around a code block in rendered Markdown. */
+  codeBlock: string
 }
 
-const DEFAULTS: UiStrings = { close: 'Close', retry: 'Retry', loading: 'Loading…' }
+const DEFAULTS: UiStrings = {
+  close: 'Close',
+  retry: 'Retry',
+  loading: 'Loading…',
+  table: 'Table',
+  codeBlock: 'Code block',
+}
 
 const Strings = createContext<UiStrings>(DEFAULTS)
 
