@@ -1,5 +1,9 @@
 import type { Heading, Nodes, Root } from 'mdast'
+import { gfmAutolinkLiteralFromMarkdown } from 'mdast-util-gfm-autolink-literal'
+import { gfmStrikethroughFromMarkdown } from 'mdast-util-gfm-strikethrough'
 import { gfmTableFromMarkdown } from 'mdast-util-gfm-table'
+import { gfmAutolinkLiteral } from 'micromark-extension-gfm-autolink-literal'
+import { gfmStrikethrough } from 'micromark-extension-gfm-strikethrough'
 import { gfmTable } from 'micromark-extension-gfm-table'
 import type { ComponentPropsWithRef, ReactNode } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
@@ -9,7 +13,7 @@ import { useString, type UiStrings } from './provider'
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 
 export interface MarkdownProps extends Omit<ComponentPropsWithRef<'div'>, 'children'> {
-  /** The Markdown: CommonMark and GFM tables. Untrusted: it decides no element of its own. */
+  /** The Markdown: CommonMark and GFM tables, strikethrough (double tilde only) and autolink literals. Untrusted: it decides no element of its own. */
   source: string
   /** The level the source's shallowest heading renders at; deeper ones keep their distance. */
   headingLevel: HeadingLevel
@@ -19,7 +23,7 @@ export interface MarkdownProps extends Omit<ComponentPropsWithRef<'div'>, 'child
 export function Markdown({ source, headingLevel, className, ...props }: MarkdownProps) {
   return (
     <div {...props} className={cx('zl-prose', className)}>
-      <ReactMarkdown remarkPlugins={[tables, [headings, headingLevel]]} components={COMPONENTS}>
+      <ReactMarkdown remarkPlugins={[gfm, [headings, headingLevel]]} components={COMPONENTS}>
         {source}
       </ReactMarkdown>
     </div>
@@ -73,13 +77,21 @@ interface ParserData {
   fromMarkdownExtensions?: unknown[]
 }
 
-// GFM's table syntax, and nothing else of GFM: what `remark-gfm` does for all of it. The
-// processor is `unified`'s, which is `react-markdown`'s dependency and not this package's, so its
-// data is typed here by the two lists the parser reads.
-function tables(this: { data(): object }) {
+// GFM's tables, strikethrough (`~~` only) and autolink literals, and nothing else of GFM: what
+// `remark-gfm` does for all of it. The processor is `unified`'s, which is `react-markdown`'s
+// dependency and not this package's, so its data is typed here by the two lists the parser reads.
+function gfm(this: { data(): object }) {
   const data = this.data() as ParserData
-  ;(data.micromarkExtensions ??= []).push(gfmTable())
-  ;(data.fromMarkdownExtensions ??= []).push(gfmTableFromMarkdown())
+  ;(data.micromarkExtensions ??= []).push(
+    gfmTable(),
+    gfmStrikethrough({ singleTilde: false }),
+    gfmAutolinkLiteral(),
+  )
+  ;(data.fromMarkdownExtensions ??= []).push(
+    gfmTableFromMarkdown(),
+    gfmStrikethroughFromMarkdown(),
+    gfmAutolinkLiteralFromMarkdown(),
+  )
 }
 
 // The shallowest heading becomes `level`; the rest keep their distance from it, up to `h6`.

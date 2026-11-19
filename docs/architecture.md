@@ -25,12 +25,14 @@ to ES modules with declarations; it is the `prepare` script, so an install over 
 Relative imports in `dist/` carry no extension, as the source's do: the output is for an
 application's bundler, not for Node.
 
-| Dependency                                                                | Kind                       | Range                        |
-| ------------------------------------------------------------------------- | -------------------------- | ---------------------------- |
-| `react-aria`, `react-stately`                                             | Dependency                 | Exactly 3.53.1 and 3.51.0    |
-| `react-markdown`, `micromark-extension-gfm-table`, `mdast-util-gfm-table` | Dependency                 | Exactly 10.1.0, 2.1.2, 2.0.0 |
-| `react`, `react-dom`                                                      | Peer                       | `^19.0.0`                    |
-| `@zellige/core`                                                           | Peer, and dev at a git tag | `~0.3.0`; dev `#v0.3.0`      |
+| Dependency                                                                    | Kind                       | Range                        |
+| ----------------------------------------------------------------------------- | -------------------------- | ---------------------------- |
+| `react-aria`, `react-stately`                                                 | Dependency                 | Exactly 3.53.1 and 3.51.0    |
+| `react-markdown`, `micromark-extension-gfm-table`, `mdast-util-gfm-table`     | Dependency                 | Exactly 10.1.0, 2.1.2, 2.0.0 |
+| `micromark-extension-gfm-strikethrough`, `mdast-util-gfm-strikethrough`       | Dependency                 | Exactly 2.1.0, 2.0.1         |
+| `micromark-extension-gfm-autolink-literal`, `mdast-util-gfm-autolink-literal` | Dependency                 | Exactly 2.1.0, 2.1.0         |
+| `react`, `react-dom`                                                          | Peer                       | `^19.0.0`                    |
+| `@zellige/core`                                                               | Peer, and dev at a git tag | `~0.3.0`; dev `#v0.3.0`      |
 
 `react-stately` 3.51.0 is the version `react-aria` 3.53.1 itself depends on. Both are exact
 because core's Tabs and radio group contracts record 3.53.1's attributes; raising them is a commit of its own,
@@ -163,10 +165,15 @@ not re-export.
 
 ### Markdown
 
-`react-markdown` parses `source` as CommonMark plus GFM tables — added by a remark plugin in
-`src/markdown.tsx` from `micromark-extension-gfm-table` and `mdast-util-gfm-table`, and nothing
-else of GFM (issue #10). Strikethrough, bare URLs, footnotes and task lists show as literal text;
-task lists wait on core's markup for them (core's issue #13). The source is parsed on every render
+`react-markdown` parses `source` as CommonMark plus GFM tables, strikethrough (double tilde only,
+`~~text~~`, rendered as `<del>`) and autolink literals (bare `http://`, `https://`, `www.` and
+email addresses, each passing the same scheme filter as a written link). A remark plugin in
+`src/markdown.tsx` adds them from the `micromark-extension-gfm-*` and `mdast-util-gfm-*` packages
+of the dependency table, and nothing else of GFM. `<del>` is the native element with no class or
+attribute: core's prose contract has no `del` yet, so the browser's line-through shows (the
+proposed core task "The prose contract has no `del`"). Footnotes and task lists show as literal
+text: footnotes wait on core's markup for them (the proposed core task "Prose has no footnote
+markup"), and task lists wait on core's issue ZLC-15. The source is parsed on every render
 (issue #11). No state; not a live region.
 
 - **Headings**: a second remark plugin renders the source's shallowest heading at
@@ -233,19 +240,19 @@ the browser suite.
 **Vitest** (`vitest.config.ts`) has two projects: `unit` (`tests/unit/`, Node) and `integration`
 (`tests/integration/`, jsdom, Testing Library, cleaned up after each test by `setup.ts`).
 
-| File                 | What it proves                                                                                                                                                                |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `unit/class.test.ts` | `buttonClass` for every variant, and the class merge                                                                                                                          |
-| `contract.test.tsx`  | Every example in core's contract, as above                                                                                                                                    |
-| `button.test.tsx`    | `type` defaults to `button`; busy keeps focus and neither calls the handler nor submits; `ref`                                                                                |
-| `strings.test.tsx`   | Defaults, provider, nested providers and the own prop, for each string                                                                                                        |
-| `field.test.tsx`     | Label, hint, error and validity wiring; each control in and out of a field; own attributes win                                                                                |
-| `status.test.tsx`    | Loading's and Retry's text fall back as the strings do; Retry only with `onRetry`                                                                                             |
-| `dialog.test.tsx`    | The close button's name falls back as the strings do, and it calls `onClose`                                                                                                  |
-| `tabs.test.tsx`      | The tab selected at first; uncontrolled and controlled selection                                                                                                              |
-| `radio.test.tsx`     | The radio checked at first; choosing, controlled and not; names, descriptions and validity; `disabled`; `ref` and own attributes on the input; a radio outside a group throws |
-| `markdown.test.tsx`  | A dataset of source, `headingLevel` and expected markup: heading shifts and the clamp, wrappers, raw HTML, links by scheme, images, entities; no image request; root props    |
-| `package.test.ts`    | `npm pack` ships `dist/` alone; every module has declarations; the entry exports what `src/` does                                                                             |
+| File                 | What it proves                                                                                                                                                                                                                                                       |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unit/class.test.ts` | `buttonClass` for every variant, and the class merge                                                                                                                                                                                                                 |
+| `contract.test.tsx`  | Every example in core's contract, as above                                                                                                                                                                                                                           |
+| `button.test.tsx`    | `type` defaults to `button`; busy keeps focus and neither calls the handler nor submits; `ref`                                                                                                                                                                       |
+| `strings.test.tsx`   | Defaults, provider, nested providers and the own prop, for each string                                                                                                                                                                                               |
+| `field.test.tsx`     | Label, hint, error and validity wiring; each control in and out of a field; own attributes win                                                                                                                                                                       |
+| `status.test.tsx`    | Loading's and Retry's text fall back as the strings do; Retry only with `onRetry`                                                                                                                                                                                    |
+| `dialog.test.tsx`    | The close button's name falls back as the strings do, and it calls `onClose`                                                                                                                                                                                         |
+| `tabs.test.tsx`      | The tab selected at first; uncontrolled and controlled selection                                                                                                                                                                                                     |
+| `radio.test.tsx`     | The radio checked at first; choosing, controlled and not; names, descriptions and validity; `disabled`; `ref` and own attributes on the input; a radio outside a group throws                                                                                        |
+| `markdown.test.tsx`  | A dataset of source, `headingLevel` and expected markup: heading shifts and the clamp, wrappers, raw HTML, links by scheme, strikethrough and its nesting, bare URLs and addresses, footnotes and task lists as text, images, entities; no image request; root props |
+| `package.test.ts`    | `npm pack` ships `dist/` alone; every module has declarations; the entry exports what `src/` does                                                                                                                                                                    |
 
 `package.test.ts` reads the `dist/` the build step made and fails if there is none.
 
@@ -264,7 +271,7 @@ stay on the host and connect with `connectOptions: { wsEndpoint, exposeNetwork: 
 | `dialog.spec.ts`   | Escape; a browser's own `close()`; backdrop presses; the opening tap; focus order and return, per dialog; the foot submitting the body's form                |
 | `tabs.spec.ts`     | A dataset of key, start and end tab in both directions; the single tab stop; a keyboard journey into each kind of panel                                      |
 | `radio.spec.ts`    | A dataset of key, start and end radio in both directions; by keyboard, one stop per group, a failed send focusing the unanswered group, a good one announced |
-| `markdown.spec.ts` | By keyboard: the link, the Table group, then the Code block group; at 320 px, Arrow Right scrolls the table's wrapper and not the page                       |
+| `markdown.spec.ts` | By keyboard: the link, the bare URL, the Table group, then the Code block group; at 320 px, Arrow Right scrolls the table's wrapper and not the page         |
 
 Elements are found by role and accessible name. The dialog specs read focus on the frame with
 `document.activeElement`, the frame having no role.

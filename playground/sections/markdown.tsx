@@ -13,6 +13,8 @@ Open the north cabin for the season, as [the booking terms](https://example.com/
   - Birch for the stove
   - Kindling
 
+~~Open on the first of December~~ Open on the twentieth. Rates: https://example.com/rates
+
 | Cabin | Beds | Stove | Water | Opens |
 | --- | --- | --- | --- | --- |
 | North | Four | Wood-burning | Well-water | December-twentieth |
