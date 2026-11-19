@@ -1,13 +1,17 @@
 import { expect, test } from '@playwright/test'
 import { openPlayground } from './playground'
 
-test('by keyboard: the link, then the table, then the code block', async ({ page }) => {
+test('by keyboard: the link, then the bare URL, then the table, then the code block', async ({
+  page,
+}) => {
   await openPlayground(page)
   // A click on the heading starts the Tab order there; the heading itself takes no focus.
   await page.getByRole('heading', { name: 'Markdown', level: 2 }).click()
 
   await page.keyboard.press('Tab')
   await expect(page.getByRole('link', { name: 'the booking terms' })).toBeFocused()
+  await page.keyboard.press('Tab')
+  await expect(page.getByRole('link', { name: 'https://example.com/rates' })).toBeFocused()
   await page.keyboard.press('Tab')
   await expect(page.getByRole('group', { name: 'Table', exact: true })).toBeFocused()
   await page.keyboard.press('Tab')
