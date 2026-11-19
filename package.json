@@ -22,7 +22,11 @@
   },
   "prettier": "charter/stacks/typescript/prettier",
   "dependencies": {
+    "mdast-util-gfm-autolink-literal": "2.1.0",
+    "mdast-util-gfm-strikethrough": "2.0.1",
     "mdast-util-gfm-table": "2.0.0",
+    "micromark-extension-gfm-autolink-literal": "2.1.0",
+    "micromark-extension-gfm-strikethrough": "2.1.0",
     "micromark-extension-gfm-table": "2.1.2",
     "react-aria": "3.53.1",
     "react-markdown": "10.1.0",

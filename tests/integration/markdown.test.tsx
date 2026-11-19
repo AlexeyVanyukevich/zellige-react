@@ -125,6 +125,114 @@ const CASES: readonly Case[] = [
     expected: '<p>A cabin</p>',
   },
 
+  // Strikethrough
+  {
+    name: 'a struck phrase beside a bare URL',
+    source: '~~a~~ https://example.com',
+    headingLevel: 2,
+    expected: '<p><del>a</del> <a href="https://example.com">https://example.com</a></p>',
+  },
+  {
+    name: 'strikethrough holding emphasis and a code span',
+    source: '~~**bold** and `code`~~',
+    headingLevel: 2,
+    expected: '<p><del><strong>bold</strong> and <code>code</code></del></p>',
+  },
+  {
+    name: 'strikethrough holding a link',
+    source: '~~[gone](https://example.com)~~',
+    headingLevel: 2,
+    expected: '<p><del><a href="https://example.com">gone</a></del></p>',
+  },
+  {
+    name: 'strikethrough holding a bare URL, the tildes outside the link',
+    source: '~~https://example.com~~',
+    headingLevel: 2,
+    expected: '<p><del><a href="https://example.com">https://example.com</a></del></p>',
+  },
+  {
+    name: 'strikethrough inside a link',
+    source: '[~~gone~~](https://example.com)',
+    headingLevel: 2,
+    expected: '<p><a href="https://example.com"><del>gone</del></a></p>',
+  },
+  {
+    name: 'strikethrough inside emphasis',
+    source: '*~~gone~~*',
+    headingLevel: 2,
+    expected: '<p><em><del>gone</del></em></p>',
+  },
+  {
+    name: 'a single tilde pair as literal text',
+    source: '~a~',
+    headingLevel: 2,
+    expected: '<p>~a~</p>',
+  },
+  {
+    name: 'single tildes in a sentence as literal text',
+    source: '~5 to ~10 minutes',
+    headingLevel: 2,
+    expected: '<p>~5 to ~10 minutes</p>',
+  },
+  {
+    name: 'a single tilde pair inside a word as literal text',
+    source: 'takes ~5 min~ish',
+    headingLevel: 2,
+    expected: '<p>takes ~5 min~ish</p>',
+  },
+
+  // Bare URLs and addresses
+  {
+    name: 'a bare URL without its final dot',
+    source: 'See https://example.com/terms.',
+    headingLevel: 2,
+    expected: '<p>See <a href="https://example.com/terms">https://example.com/terms</a>.</p>',
+  },
+  {
+    name: 'a bare www. address linked over http',
+    source: 'www.example.com',
+    headingLevel: 2,
+    expected: '<p><a href="http://www.example.com">www.example.com</a></p>',
+  },
+  {
+    name: 'a bare email address linked as mailto:',
+    source: 'owner@example.com',
+    headingLevel: 2,
+    expected: '<p><a href="mailto:owner@example.com">owner@example.com</a></p>',
+  },
+  {
+    name: 'a bare javascript: as its text',
+    source: 'javascript:alert(1)',
+    headingLevel: 2,
+    expected: '<p>javascript:alert(1)</p>',
+  },
+  {
+    name: 'a URL in a code span not linked',
+    source: '`https://example.com`',
+    headingLevel: 2,
+    expected: '<p><code>https://example.com</code></p>',
+  },
+  {
+    name: 'a URL in a fenced block not linked',
+    source: '```\nhttps://example.com\n```',
+    headingLevel: 2,
+    expected: code('https://example.com'),
+  },
+
+  // Left as text
+  {
+    name: 'a footnote reference and definition as text',
+    source: 'Text[^1]\n\n[^1]: The note.',
+    headingLevel: 2,
+    expected: '<p>Text[^1]</p><p>[^1]: The note.</p>',
+  },
+  {
+    name: 'a task-list item as text',
+    source: '- [ ] step',
+    headingLevel: 2,
+    expected: '<ul><li>[ ] step</li></ul>',
+  },
+
   // Text
   {
     name: 'an entity decoded outside a code span and kept inside one',
